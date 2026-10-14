@@ -11,6 +11,24 @@ class ClienteAdmin(admin.ModelAdmin):
 
 @admin.register(Reparacion)
 class ReparacionAdmin(admin.ModelAdmin):
-    list_display = ('descripcion', 'cliente', 'costo', 'fecha', 'terminada')
+    list_display = (
+        'descripcion',
+        'cliente',
+        'costo_formateado',
+        'fecha',
+        'terminada',
+    )
+
     list_filter = ('terminada', 'fecha')
-    search_fields = ('descripcion', 'cliente__nombre')
+
+    search_fields = (
+        'descripcion',
+        'cliente__nombre',
+    )
+
+    @admin.display(
+        description='Costo',
+        ordering='costo'
+    )
+    def costo_formateado(self, obj):
+        return f"$ {obj.costo:,}".replace(",", ".")
